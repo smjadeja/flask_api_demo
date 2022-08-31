@@ -1,0 +1,19 @@
+required fields
+FullName*	string
+Email*	string
+Mobile*	string
+DateOfBirth*	string
+Password*
+
+Create below apis using Flask framework.
+	1)	User Registrations: 
+	2)	Login:
+	3)	Forgot password:
+	4)	Change password:
+	5)	Update Profile:
+	6)	Get All Registered User:
+
+
+Link: https://flask-apis-demo.herokuapp.com/
+
+
