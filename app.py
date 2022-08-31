@@ -87,21 +87,21 @@ class UserApi(MethodView):
             password = request.json["password"]
             date_of_birth = request.json["date_of_birth"]
             if firstname == "":
-                return ResultApi({},'please enter first name')
+                return ResultApi({},'please enter first name',success=False)
             if email == "":
-                return ResultApi('', "please enter email")
+                return ResultApi('', "please enter email",success=False)
             if not (re.fullmatch(regex, email)):
-                return ResultApi({},'please enter a valid email address')
+                return ResultApi({},'please enter a valid email address',success=False)
             if Users.query.filter_by(Email=email).first():
-                return ResultApi({}, message='email already exists')
+                return ResultApi({}, message='email already exists',success=False)
             if mobile== "":
-                return ResultApi({},'mobile number is incorrect')
+                return ResultApi({},'mobile number is incorrect',success=False)
             if len(str(mobile)) > 10:
-                return ResultApi({},'please enter only 10 digit')
+                return ResultApi({},'please enter only 10 digit',success=False)
             if password == "":
-                return ResultApi({},'please enter password')
+                return ResultApi({},'please enter password',success=False)
             if date_of_birth == "":
-                return ResultApi('', "please enter birthdate")
+                return ResultApi('', "please enter birthdate",success=False)
             newuser = Users(First_Name=firstname,Email=email,Mobile=mobile,Password=password, Date_of_Birth=date_of_birth)
             db.session.add(newuser)
             db.session.commit()
@@ -118,23 +118,23 @@ class UserApi(MethodView):
                 user = Users.query.filter_by(id=id).first()
                 user.First_Name = request.json['firstname']
                 if Users.query.filter_by(Email=request.json['email']).first():
-                    return ResultApi({},'email already exists')
+                    return ResultApi({},'email already exists',success=False)
                 if not (re.fullmatch(regex, request.json['email'])):
-                    return ResultApi({},'please enter a valid email address')
+                    return ResultApi({},'please enter a valid email address,success=False')
                 user.Email = request.json['email']
                 user.Mobile = request.json['mobile']
                 user.Date_of_Birth = request.json['date_of_birth']
                 if user.First_Name == "":
-                    return ResultApi({},'please enter firstname')
+                    return ResultApi({},'please enter firstname',success=False)
                 if user.Mobile == "":
-                    return ResultApi({},'mobile number is incorrect')
+                    return ResultApi({},'mobile number is incorrect',success=False)
                 if len(str(user.Mobile)) > 10:
-                    return ResultApi({},'please enter only 10 digit')
+                    return ResultApi({},'please enter only 10 digit',success=False)
                 if user.Date_of_Birth == "":
-                    return ResultApi({},'please enter date of birth')
+                    return ResultApi({},'please enter date of birth',success=False)
                 db.session.commit()
-                return ResultApi(get_user(id), message='profile updated successfully')
-            return ResultApi({}, message='please enter valid id')
+                return ResultApi(get_user(id), message='profile updated successfully',success=False)
+            return ResultApi({}, message='please enter valid id',success=False)
         except KeyError:
             raise ApiException('you didnt entered all keys or values')
         except Exception:
@@ -148,8 +148,8 @@ class UserApi(MethodView):
                     db.session.delete(user)
                     db.session.commit()
                     return ResultApi({}, message='deleted successfully')
-                return ResultApi({},'no user exists with this id')
-            return ResultApi({},'please enter valid id')
+                return ResultApi({},'no user exists with this id',success=False)
+            return ResultApi({},'please enter valid id',success=False)
         except KeyError:
             raise ApiException('you didnt entered all keys or values')
         except Exception:
@@ -167,9 +167,9 @@ class Userlogin(MethodView):
                 if a:
                     if a.Email == request.json['email'] and a.Password == request.json['password']:
                         return ResultApi({}, message="logged in successfully")
-                    return ResultApi({}, message="email or password is incorrect")
-                return ResultApi({},'please enter valid id')
-            return ResultApi('id should not be empty')   
+                    return ResultApi({}, message="email or password is incorrect",success=False)
+                return ResultApi({},'please enter valid id',success=False)
+            return ResultApi('id should not be empty',success=False)   
         except KeyError:
             raise ApiException('something went wrong')
         except Exception:
@@ -185,11 +185,11 @@ class ChangePassword(MethodView):
                 a = getuser_by_id(id)
                 if a:
                     if request.json['oldpassword'] == "" or request.json['newpassword'] == "": 
-                        return ResultApi('',"passwrods should not be empty")
+                        return ResultApi('',"passwrods should not be empty",success=False)
                     if not a.Password == request.json['oldpassword']:
-                        return ResultApi('', "you have entered wrong old password")
+                        return ResultApi('', "you have entered wrong old password",success=False)
                     if request.json['oldpassword'] == request.json['newpassword']:
-                        return ResultApi('', 'new password should not be same as old')
+                        return ResultApi('', 'new password should not be same as old',success=False)
                     a.Password = request.json['newpassword']
                     db.session.commit()
                     return ResultApi('', 'password changed succesfully')
@@ -210,9 +210,9 @@ class ForgotPassword(MethodView):
                 if (re.fullmatch(regex,a)):
                     if Users.query.filter_by(Email=a).first():
                         return ResultApi({}, message="Check your inbox we have sent reset link on your email")
-                    return ResultApi({}, message="no user found with this email")
-                return ResultApi('','please enter valid email')
-            return ResultApi('', 'please enter email')
+                    return ResultApi({}, message="no user found with this email",success=False)
+                return ResultApi('','please enter valid email',success=False)
+            return ResultApi('', 'please enter email',success=False)
         except KeyError:
             raise ApiException('all keys are required')
         except Exception:
