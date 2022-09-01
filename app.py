@@ -169,7 +169,7 @@ class Userlogin(MethodView):
                         return ResultApi({}, message="logged in successfully")
                     return ResultApi({}, message="email or password is incorrect",success=False)
                 return ResultApi({},'please enter valid id',success=False)
-            return ResultApi('id should not be empty',success=False)   
+            return ResultApi({},'id should not be empty',success=False)   
         except KeyError:
             raise ApiException('something went wrong')
         except Exception:
